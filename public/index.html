@@ -1,0 +1,79 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/p5@1.1.9/lib/p5.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script type="text/javascript" src="sketch.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <title>5M</title>
+</head>
+<body>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>M5</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <!-- import the webpage's stylesheet -->
+    <link rel="stylesheet" href="/style.css" />
+
+    <!-- import the latest version of hydra synth-->
+    <script src="https://unpkg.com/hydra-synth"></script>
+
+    <script src="/socket.io/socket.io.js"></script>
+</head>
+
+<body>
+    <canvas id='myCanvas' style='position:absolute; left:0px; top:0px;'></canvas>
+    <!-- <span id="title"
+        style='position:absolute; left:50%; top:20%; transform: translate(-50%,-50%); margin:auto ; font-size: xx-large; color: antiquewhite;'>🔍 COLOMBIA</span> -->
+    <span id="myspan"
+        style='position:absolute; left:50%; top:50%; transform: translate(-50%,-50%); margin:auto ; font-size: xx-large; color: antiquewhite;'></span>
+    <span id="myspan1"
+        style='position:absolute; left:50%; top:80%; transform: translate(-50%,-50%); margin:auto ; font-size: large; color: antiquewhite;'></span>
+    <script>
+        // let socket = io.connect('https://m5colombia.rj.r.appspot.com:3000');
+        let socket = io();
+        socket.on('data', process_data)
+
+
+        let htmlCanvas = document.getElementById('myCanvas');
+        htmlCanvas.width = window.innerWidth;
+        htmlCanvas.height = window.innerHeight;
+        // create a new hydra-synth instance
+        var hydra = new Hydra({
+            canvas: htmlCanvas,
+            detectAudio: false
+        })
+        osc(5, .1).modulate(noise(6), .22).diff(o0)
+            .modulateScrollY(osc(2).modulate(osc().rotate(), .11))
+            .scale(.72).color(1, 0.25, 0.5)
+            .out()
+
+        let num_tweets = 0;
+        function process_data(data) {
+            // console.log(data);
+            const date_str = convertTZ(data.created_at, "America/Bogota");
+            num_tweets++;
+            if (num_tweets % 100 == 0) {
+                document.getElementById("myspan").textContent = data.text;
+                document.getElementById("myspan1").textContent = date_str;
+            }
+        }
+
+        function convertTZ(date, tzString) {
+            return new Date((typeof date === "string" ? new Date(date) : date).toLocaleString("es-ES", { timeZone: tzString }));
+        }
+
+    </script>
+</body>
+
+</html>

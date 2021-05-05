@@ -53,7 +53,7 @@ const isTweet = _.conforms({
 
 var stream = client.stream('statuses/filter', { track: 'Colombia' });
 stream.on('data', function (event) {
-    // console.log(event.text);
+    console.log(event.text);
     if (!(isTweet(event))) {
         socket_emit_data(event);
     }

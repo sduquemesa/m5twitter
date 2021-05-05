@@ -6,7 +6,6 @@ const path = require('path');
 const express = require('express')
 const socket = require("socket.io")
 
-const NodeGeocoder = require('node-geocoder');
 
 let SEARCH_TIME = 5 * (60 * 1000);     // time to get tweets in minutes (ms conversion factor)
 
@@ -15,10 +14,10 @@ let SEARCH_TIME = 5 * (60 * 1000);     // time to get tweets in minutes (ms conv
 const app = express()
 app.use(express.static(path.join(__dirname, 'public')))
 
-var server = app.listen(process.env.PORT | 3000, () => {
+var server = app.listen(process.env.PORT || 3000, () => {
     var host = server.address().address;
     var port = server.address().port;
-    console.log('App listening at http://localhost' + ':' + port);
+    console.log('App listening on port:' + port);
 });
 
 // Sockets stuff

@@ -1,6 +1,7 @@
 const dotenv = require('dotenv').config();
 const Twitter = require('twitter');
 _ = require('lodash')
+const path = require('path');
 
 const express = require('express')
 const socket = require("socket.io")
@@ -12,7 +13,7 @@ let SEARCH_TIME = 5 * (60 * 1000);     // time to get tweets in minutes (ms conv
 // Express stuff
 
 const app = express()
-app.use(express.static('public'))
+app.use(express.static(path.join(__dirname, 'public')))
 
 var server = app.listen(process.env.PORT | 3000, () => {
     var host = server.address().address;
@@ -53,7 +54,7 @@ const isTweet = _.conforms({
 
 var stream = client.stream('statuses/filter', { track: 'Colombia' });
 stream.on('data', function (event) {
-    console.log(event.text);
+    // console.log(event.text);
     if (!(isTweet(event))) {
         socket_emit_data(event);
     }
